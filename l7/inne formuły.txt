@@ -1,0 +1,5 @@
+c3:
+=ROK(L2)-ROK(F2)
+
+c5:
+=ZAOKR.DO.CAŁK((DATA(ROK(L2);MIESIĄC(L2);DZIEŃ(L2))-M2)/30)
