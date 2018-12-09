@@ -1,0 +1,37 @@
+1. Discretize -R first-last -precision 6
+
+2. GainRatioAttributeEval (Ranker -T -1.7976931348623157E308 -N -1):
+    0.10878     7 okres w jakim pobieral dochod
+    0.07159     5 miesieczny dochod netto
+    0.03977     3 plec
+    0.03372     9 status pozyczki
+    0.00947     6 ktore rolowanie
+    0           4 rodzaj zrodla dochodu
+    0           8 okres w jakim bedzie pobieral dochod
+    0           1 kwota kredytu
+
+3. InfoGainAttributeEvla (Ranker -T -1.7976931348623157E308 -N -1):
+    0.0404      7 okres w jakim pobieral dochod
+    0.03826     3 plec
+    0.02199     9 status pozyczki
+    0.00899     6 ktore rolowanie
+    0.00584     5 miesieczny dochod netto
+    0           4 rodzaj zrodla dochodu
+    0           8 okres w jakim bedzie pobieral dochod
+    0           1 kwota kredytu
+
+Wybrane atrybuty:                   7, 5, 3, 9, 6
+Sortowanie wg GainRatio rosnaco:    6, 9, 3, 5, 7
+Atrybuty do usuniecia:              1, 4, 8
+
+4. Remove -R 1,4,8
+
+5. Reorder -R 4,6,2,3,5,1
+
+---------------------------------------
+
+GR(C, A) = (H(C) - H(C|A)) / H(A)
+H(A) = 0 <=> A jest stala
+GR(C, C) = ((H(C) - H(C|C)) / H(C)) = 1 - H(C|C)/H(C) = 1
+
+*) H(Y|X) = 0 wtedy i tylko wtedy gdy wartosc Y jest calkowicie zdeterminowana przez wartosc X

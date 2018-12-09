@@ -1,0 +1,43 @@
+Podczas budowy modelu służącego predykcji w systemach inteligencji obliczeniowej często spotykamy się z problemem, w którym nie znamy znaczenia ani istotności poszczególnych zmiennych składających się na zbiór danych którymi dysponujemy. Innym częstym przypadkiem jest tzw. występowanie cech(zmiennych) redundantnych. Zmienne takie w pewnym uproszczeniu mogą byd interpretowane jako cechy które niosą tą samą informację co inne zmienne. Mogą to być więc zmienne wyrażone w różnych jednostkach np. wzrost wyrażony w centymetrach, a druga zmienna wyrażona w metrach, jeszcze innym przykładem tego problemu może być np. w przypadku klasyfikacji płci zmienna opisująca rozmiar buta oraz druga opisująca rozmiar stopy wyznaczony w „cm”. Usunięcie takich cech nie wpływa negatywnie na sam proces uczenia, a jednocześnie redukuje przestrzeń zmiennych, co dla niektórych algorytmów może być szczególnie istotne. Wiąże się to z tzw. przekleństwem wymiarowości. Problem ten występuje np. w większości modeli statystycznych bazujących na wielowymiarowej estymacji prawdopodobieństwa, gdyż wówczas złożoność obliczeniowa i pamięciowa jest rzędu m^n – gdzie m to liczba wartości/przedziałów zmiennych, natomiast n to liczba zmiennych. Dla przykładu złożoność dla 4 przedziałów zmiennej dyskretnej i 10 cech = 1.048.576, natomiast już dla 12 cech złożoność ta jest równa = 16.777.216.
+
+źródło: http://mblachnik.pl/lib/exe/fetch.php/dydaktyka/zajecia/ai/lab/matlab/selekcja_cech_cz1.pdf
+
+------------------------------
+
+Supervised learning, in the context of artificial intelligence (AI) and machine learning, is a type of system in which both input and desired output data are provided. Input and output data are labelled for classification to provide a learning basis for future data processing.
+
+źródlo: https://searchenterpriseai.techtarget.com/definition/supervised-learning
+
+------------------------------
+
+https://www.futurelearn.com/courses/more-data-mining-with-weka/0/steps/29114
+
+------------------------------
+
+GainRatioAttributeEval:
+
+Evaluates the worth of an attribute by measuring the gain ratio with respect to the class.\
+GainR(Class, Attribute) = (H(Class) - H(Class | Attribute)) / H(Attribute).
+
+------------------------------
+
+Ranker:
+
+Ranks attributes by their individual evaluations. Use in conjunction with attribute evaluators (ReliefF, GainRatio, Entropy etc).
+Valid options are:
+
+ -P <start set>
+  Specify a starting set of attributes.
+  Eg. 1,3,5-7.
+  Any starting attributes specified are
+  ignored during the ranking.
+ 
+ -T <threshold>
+  Specify a theshold by which attributes
+  may be discarded from the ranking.
+ 
+ -N <num to select>
+  Specify number of attributes to select
+
+  [Wartosc -1 oznacza, ze maja zachowane byc wszystkie atrybuty]
+ 
