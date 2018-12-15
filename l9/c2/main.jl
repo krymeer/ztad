@@ -1,104 +1,77 @@
-function countpairs(xarr::Array{}, yarr::Array{}, _x, _y)
-    resultsum   = 0
-    nx          = length(xarr)
-    ny          = length(yarr)
+include("maths.jl")
 
-    if nx != ny
-        return -1
-    end
+function readfile(filename::String)
+    columns     = Pair[]
+    datanext    = false
 
-    for k = 1 : nx
-        if xarr[k] == _x && yarr[k] == _y
-            resultsum += 1
-        end
-    end
+    for line in eachline(ARGS[1])
+        if occursin("@attribute", line)
+            attr = replace(line, r"(@attribute\s?|\s?numeric|')" => "")
+            attr = replace(attr, r"\s?\{.*\}" => "")
 
-    return resultsum
-end
+            push!(columns, attr => [])
+        elseif occursin("@data", line)
+            datanext = true
+        elseif datanext
+            prepline    = replace(line, r"('\\'|\\'')" => "")  
+            cells       = split(prepline, ",")
 
-function entropycond(xarr::Array{}, yarr::Array{})
-    nx      = length(xarr)
-    ny      = length(yarr)
-    ydone   = []
-    xydone  = []
-    etotal  = 0
-
-    if nx != ny
-        return -1
-    end
-
-    # Kroki:
-    # 1. Wyznaczam liczbe unikalnych x
-    # 2. Obliczam prawdopodobienstwo wystapienia kazdego unikalnego x
-    # 3. Wyznaczam liczbe unikalnych par xy
-    # 4. Obliczam prawdopodobienstwo wystapienia kazdej unikalnej pary (wzgledem wszystkich par)
-
-    for k = 1 : ny
-        if !any(v -> (v == yarr[k]), ydone)
-            push!(ydone, yarr[k])
-
-            numy    = count(v -> (v == yarr[k]), yarr) 
-            py      = numy / ny
-            sumxy   = 0
-
-            for j = 1 : nx
-                if !any(xy -> (xy[1] == xarr[j] && xy[2] == yarr[k]), xydone)
-                    push!(xydone, (xarr[j], yarr[k]))
-
-                    numxy   = countpairs(xarr, yarr, xarr[j], yarr[k])
-                    pxy     = numxy / nx
-                    sumxy   += pxy * log(2, pxy)
-                end
+            if length(cells) != length(columns)
+                println(stderr, "\nBlad: liczba kolumn jest rozna od liczby atrybutow\n")
+                exit()
             end
-            println(sumxy)
 
-            etotal -= py * sumxy
+            for k = 1 : length(cells)
+                push!(columns[k][2], cells[k])
+            end
         end
     end
 
-    return etotal
+    return columns
 end
 
+if length(ARGS) < 2
+    println(stderr, "\nUzycie: julia main.jl nazwa_pliku_wejsciowego indeks_klasy podstawa_logarytmu_(ew.)\n")
+else
+    cols    = readfile(ARGS[1])
+    colnum  = length(cols)
+    gratios = Tuple[]
+    
+    index   = try
+        parse(Int64, ARGS[2])
+    catch
+        1
+    end
 
+    logbase = try
+        parse(Float64, ARGS[3])
+    catch
+        Float64(MathConstants.e)
+    end
 
-struct UniqueElem
-    val
-    num::Int64
-end
+    if index > colnum || 1 > index
+        index = 1
+    end
 
-function entropy(dataarr::Array{})
-    resultsum   = 0
-    uniqarr     = UniqueElem[]
-    datalen     = length(dataarr)
+    for k = 1 : colnum
+        if k == index
+            continue
+        end
 
-    # Ustalanie licznosci tych samych elementow (wartosci)
-    for a in dataarr
-        if !any(x -> x.val == a, uniqarr)
-            cnt     = count(x -> x == a, dataarr)
-            elem    = UniqueElem(a, cnt)
-            push!(uniqarr, elem) 
+        push!(gratios, ((cols[k][1], k), gainratio(cols[index][2], cols[k][2], logbase)))
+    end
+
+    sort!(gratios, by = gr -> gr[2], rev = true)
+
+    println("\nWybrana klasa: ", cols[index][1], "\n\nRanking atrybutow:")
+
+    for k = 1 : colnum-1
+        if gratios[k][2] == 0.0
+            println(" ", gratios[k][2], "       ", gratios[k][1][2], " ", gratios[k][1][1])
+        else
+            println(" ", round(gratios[k][2], digits = 5), "   ", gratios[k][1][2], " ", gratios[k][1][1])
         end
     end
 
-    # Obliczanie prawdopodobienstwa wystapienia danego elementu
-    for u in uniqarr
-        p = u.num / datalen
-        resultsum += p * log(2, p)
-    end
-
-    resultsum *= -1
-
-    return resultsum
+    println()
 end
-
-dataset = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-dataset = ["r", "o"]
-ent     = entropy(dataset)
-
-jobstat = ["employed", "unemployed", "employed", "employed", "employed", "unemployed", "unemployed", "unemployed", "employed", "employed"]
-sex     = ["male", "male", "male", "male", "male", "female", "female", "female", "female", "female"]
-
-println(ent, "\t", ent*8)
-
-econd   = entropycond(jobstat, sex)
-println(econd)

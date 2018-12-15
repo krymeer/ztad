@@ -1,0 +1,12 @@
+
+Wybrana klasa: wiek
+
+Ranking atrybutow:
+ 0.28991   4 rodzaj zrodla dochodu
+ 0.19376   5 miesieczny dochod netto
+ 0.13092   8 okres w jakim bedzie pobieral dochod
+ 0.09597   7 okres w jakim pobieral dochod
+ 0.08805   1 kwota kredytu
+ 0.03977   3 plec
+ 0.03372   9 status pozyczki
+ 0.00529   6 ktore rolowanie

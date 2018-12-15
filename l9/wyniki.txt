@@ -1,0 +1,64 @@
+############################
+#                          #
+#   Przed dyskretyzacja:   #
+#                          #
+############################
+
+Ranked attributes:
+ 0.3021   4 rodzaj zrodla dochodu
+ 0.2215   8 okres w jakim bedzie pobieral dochod
+ 0.134    7 okres w jakim pobieral dochod
+ 0.0484   5 miesieczny dochod netto
+ 0.0398   3 plec
+ 0.0337   9 status pozyczki
+ 0.0191   1 kwota kredytu
+ 0        6 ktore rolowanie
+
+
+#########################
+#                       #
+#        main.jl        #
+#                       #
+#########################
+
+ 0.28991   4 rodzaj zrodla dochodu
+ 0.19376   5 miesieczny dochod netto
+ 0.13092   8 okres w jakim bedzie pobieral dochod
+ 0.09597   7 okres w jakim pobieral dochod
+ 0.08805   1 kwota kredytu
+ 0.03977   3 plec
+ 0.03372   9 status pozyczki
+ 0.00529   6 ktore rolowanie
+
+
+#########################
+#                       #
+#   Po dyskretyzacji:   #
+#                       #
+#########################
+
+Ranked attributes:
+ 0.10878   7 okres w jakim pobieral dochod
+ 0.07159   5 miesieczny dochod netto
+ 0.03977   3 plec
+ 0.03372   9 status pozyczki
+ 0.00947   6 ktore rolowanie
+ 0         4 rodzaj zrodla dochodu
+ 0         8 okres w jakim bedzie pobieral dochod
+ 0         1 kwota kredytu
+
+
+#########################
+#                       #
+#  main.jl (po dyskr.)  #
+#                       #
+#########################
+
+ 0.10878   7 okres w jakim pobieral dochod
+ 0.07159   5 miesieczny dochod netto
+ 0.03977   3 plec
+ 0.03372   9 status pozyczki
+ 0.00947   6 ktore rolowanie
+ 0.0       1 kwota kredytu
+ 0.0       4 rodzaj zrodla dochodu
+ 0.0       8 okres w jakim bedzie pobieral dochod
