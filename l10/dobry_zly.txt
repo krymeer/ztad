@@ -1,0 +1,25 @@
+Info: file loaded successfully
+Info: number of instances found: 1581
+
+Results
+======
+
+Correctly Classified Instances          130             82.2785 %
+Incorrectly Classified Instances        28              17.7215 %
+Kappa statistic                         0.2913
+Mean absolute error                     0.2747
+Root mean squared error                 0.3729
+Relative absolute error                 109.0584 %
+Root relative squared error             113.1387 %
+Total Number of Instances               158
+
+FP: 18.0
+FN: 10.0
+TP: 9.0
+TN: 121.0
+
+=== Confusion Matrix ===
+
+a       b       <-- classified as
+121     18      |   a = dobry
+10      9       |   b = zly

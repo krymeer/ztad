@@ -1,6 +1,10 @@
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.List;
+import java.util.ArrayList;
+import weka.core.Attribute;
+import weka.core.Instance;
 import weka.core.Instances;
 
 public class ArffDataReader {
@@ -14,6 +18,51 @@ public class ArffDataReader {
         this.classifier     = "";
         this.classIndex     = -1;
         this.numberOfFolds  = -1;
+    }
+
+    private Instances reorderAttributeValues(Instances instances, String attrName, String[] attrValues) {
+        Instances updatedInstances  = new Instances(instances);
+        Attribute attribute         = updatedInstances.attribute(attrName);
+        boolean properOrder         = true;
+        int numberOfValues          = attrValues.length;
+
+        if (attribute != null && attribute.isNominal() && numberOfValues == attribute.numValues())
+        {
+            for (int k = 0; k < numberOfValues; k++)
+            {
+
+                if (!attribute.value(k).equals(attrValues[k]))
+                {
+                    properOrder = false;
+                    break;
+                }
+            }
+
+            if (!properOrder)
+            {
+                List<String> list   = new ArrayList<String>(numberOfValues);
+                int attrIndex       = attribute.ordering();
+
+                for (String av : attrValues)
+                {
+                    list.add(av);
+                }
+
+                Attribute updatedAttribute = new Attribute(attrName + "_", list);
+
+                updatedInstances.insertAttributeAt(updatedAttribute, attrIndex);
+
+                for (Instance inst : updatedInstances)
+                {
+                    inst.setValue(attrIndex, inst.stringValue(attrIndex+1));
+                }
+
+                updatedInstances.deleteAttributeAt(attrIndex+1);
+                updatedInstances.renameAttribute(attrIndex, attrName);
+            }
+        }
+
+        return updatedInstances;
     }
 
     public void handleArgs(String[] args) {
@@ -65,8 +114,9 @@ public class ArffDataReader {
 
         try
         {
-            Reader reader   = new FileReader(filename);
-            this.inputSet   = new Instances(reader); 
+            Reader reader       = new FileReader(filename);
+            Instances instances = new Instances(reader);
+            this.inputSet       = reorderAttributeValues(instances, "status pozyczki", new String[]{"zly", "dobry"});
         }
         catch(IOException e)
         {

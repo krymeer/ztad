@@ -3,13 +3,13 @@ import weka.core.Instance;
 import weka.core.Instances;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
-import weka.classifiers.bayes.NaiveBayesUpdateable;
+import weka.classifiers.bayes.NaiveBayes;
 
 public class ClassifierHandler {
     private Classifier getClassifier(String name) {
         if (name.equals("bayes"))
         {
-            return new NaiveBayesUpdateable();
+            return new NaiveBayes();
         }
         
         return null;
@@ -70,6 +70,8 @@ public class ClassifierHandler {
                 System.err.println("TP: " + eval.numTruePositives(1));
                 System.err.println("TN: " + eval.numTrueNegatives(1));
                 System.err.println();
+
+                System.err.println(eval.toMatrixString());
             }
             catch(Exception e)
             {
