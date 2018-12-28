@@ -12,12 +12,14 @@ public class ArffDataReader {
     String classifier;
     int classIndex;
     int numberOfFolds;
+    int numberOfExperiments;
 
     ArffDataReader() {
-        this.inputSet       = null;
-        this.classifier     = "";
-        this.classIndex     = -1;
-        this.numberOfFolds  = -1;
+        this.inputSet               = null;
+        this.classifier             = "";
+        this.classIndex             = -1;
+        this.numberOfFolds          = -1;
+        this.numberOfExperiments    = -1;
     }
 
     private Instances reorderAttributeValues(Instances instances, String attrName, String[] attrValues) {
@@ -69,9 +71,9 @@ public class ArffDataReader {
         String filename = "";
         ArffDataReader adr = new ArffDataReader();
 
-        if (args.length < 1)
+        if (args.length < 1 || (args.length % 2) > 0)
         {
-            System.err.println("\nUsage: java -cp .:weka.jar Main -f filename -cls classifier -ci classIndex -nf numberOfFolds\n");
+            System.err.println("\nUsage: java -cp .:weka.jar Main -f filename -cls classifier -ci classIndex -nf numberOfFolds -ne numberOfExperiments\n");
             System.exit(0);
         }
 
@@ -103,6 +105,18 @@ public class ArffDataReader {
                 try
                 {
                     this.numberOfFolds = Integer.parseInt(args[k+1]);
+                }
+                catch(NumberFormatException e)
+                {
+                    System.err.println();
+                    e.printStackTrace();
+                }
+            }
+            else if (args[k].equals("-ne"))
+            {
+                try
+                {
+                    this.numberOfExperiments = Integer.parseInt(args[k+1]);
                 }
                 catch(NumberFormatException e)
                 {

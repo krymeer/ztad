@@ -58,11 +58,16 @@ public class Main {
             System.err.println("\nError: the class index (" + adr.classIndex + ") is greater than number of attributes (" + numberOfAttributes + ") for the given input set\n");
             System.exit(0);
         }
+        else if (adr.numberOfExperiments < 1)
+        {
+            System.err.println("\nError: number of experiments (" + adr.numberOfExperiments + ") is smaller than the allowed minimum (1)\n");
+            System.exit(0);
+        }
+
 
         System.err.println("\nInfo: file loaded successfully");
-        System.err.println("Info: number of instances found: " + numberOfInstances);
 
         ClassifierHandler handler = new ClassifierHandler();
-        handler.testClassifier(adr.inputSet, adr.classifier, adr.classIndex, adr.numberOfFolds, numberOfInstances);
+        handler.testClassifier(adr.inputSet, adr.classifier, adr.classIndex, adr.numberOfFolds, numberOfInstances, adr.numberOfExperiments);
     }
 }

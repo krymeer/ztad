@@ -1,4 +1,7 @@
+import java.lang.Math;
+import java.util.Enumeration;
 import java.util.Random;
+import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.classifiers.Classifier;
@@ -6,6 +9,13 @@ import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
 
 public class ClassifierHandler {
+    private void printInstances(Instances instances) {
+        for (Instance inst : instances)
+        {
+            System.out.println(inst);
+        }
+    }
+
     private Classifier getClassifier(String name) {
         if (name.equals("bayes"))
         {
@@ -15,72 +25,147 @@ public class ClassifierHandler {
         return null;
     }
 
-    public void testClassifier(Instances inputSet, String classifier, int classIndex, int numberOfFolds, int numberOfInstances) {
-        boolean[] instancesUsed = new boolean[numberOfInstances];
+    private double getMeanFromIntArray(int[] arr) {
+        double mean = 0.0;
+        int n       = arr.length;
+
+        if (n > 0)
+        {
+            for (int a : arr)
+            {
+                mean += a;
+            }
+
+            mean /= n;
+        }
+
+        return mean;
+    }
+
+    public void testClassifier(Instances inputSet, String classifier, int classIndex, int numberOfFolds, int numberOfInstances, int numberOfExperiments) {
+        boolean[] instancesUsed;
         boolean[] currentlyTested;
         Classifier cls;
         Evaluation eval;
         Instances instances = new Instances(inputSet);
         Instances testingSet;
         Instances trainingSet;
+        Random rand;
+        int tn, tp, fn, fp;
+        int[] tpArr         = new int[numberOfExperiments];
+        int[] fpArr         = new int[numberOfExperiments];
+        int[] tnArr         = new int[numberOfExperiments];
+        int[] fnArr         = new int[numberOfExperiments];
         int testingSetSize  = numberOfInstances / numberOfFolds;
         int trainingSetSize = numberOfInstances - testingSetSize;
-        Random rand;
 
         instances.setClassIndex(classIndex);
 
-        for (int k = 0; k < numberOfFolds; k++)
+        for (int j = 0; j < numberOfExperiments; j++)
         {
-            testingSet      = new Instances(instances, testingSetSize);
-            trainingSet     = new Instances(instances, trainingSetSize); 
-            rand            = new Random();
-            currentlyTested = new boolean[numberOfInstances];
+            instancesUsed = new boolean[numberOfInstances];
+            tn = 0; tp = 0; fn = 0; fp = 0;
 
-            while (testingSetSize != testingSet.size())
+            for (int k = 0; k < numberOfFolds; k++)
             {
-                int index = rand.nextInt(testingSetSize + 1);
+                testingSet      = new Instances(instances, testingSetSize);
+                trainingSet     = new Instances(instances, trainingSetSize);
+                rand            = new Random();
+                currentlyTested = new boolean[numberOfInstances];
 
-                if (!instancesUsed[index])
+                while (testingSetSize != testingSet.size())
                 {
-                    currentlyTested[index]  = true;
-                    instancesUsed[index]    = true;
-                    testingSet.add(instances.get(index));
+                    int index = rand.nextInt(numberOfInstances);
+
+                    if (!instancesUsed[index])
+                    {
+                        currentlyTested[index]  = true;
+                        instancesUsed[index]    = true;
+                        testingSet.add(instances.get(index));
+                    }
+                }
+
+                for (int i = 0; i < numberOfInstances; i++)
+                {
+                    if (!currentlyTested[i])
+                    {
+                        trainingSet.add(instances.get(i));
+                    }
+                }
+
+                try
+                {
+                    cls = getClassifier(classifier);
+                    eval = new Evaluation(trainingSet);
+
+                    cls.buildClassifier(trainingSet);
+                    eval.evaluateModel(cls, testingSet);
+
+                    tn += eval.numTrueNegatives(classIndex);
+                    tp += eval.numTruePositives(classIndex);
+                    fn += eval.numFalseNegatives(classIndex);
+                    fp += eval.numFalsePositives(classIndex);
+                }
+                catch(Exception e)
+                {
+                    System.err.println();
+                    e.printStackTrace();
                 }
             }
 
-            for (int i = 0; i < numberOfInstances; i++)
-            {
-                if (!currentlyTested[i])
-                {
-                    trainingSet.add(instances.get(i));
-                }
-            }
-
-            try
-            {
-                cls = getClassifier(classifier);
-                eval = new Evaluation(trainingSet);
-
-                cls.buildClassifier(trainingSet);
-                eval.evaluateModel(cls, testingSet);
-
-                System.err.println(eval.toSummaryString("\nResults\n======\n", false));
-                System.err.println("FP: " + eval.numFalsePositives(1));
-                System.err.println("FN: " + eval.numFalseNegatives(1));
-                System.err.println("TP: " + eval.numTruePositives(1));
-                System.err.println("TN: " + eval.numTrueNegatives(1));
-                System.err.println();
-
-                System.err.println(eval.toMatrixString());
-            }
-            catch(Exception e)
-            {
-                System.err.println();
-                e.printStackTrace();
-            }
-            
-            if (k == 0)
-                break;
+            tpArr[j] = tp;
+            fpArr[j] = fp;
+            tnArr[j] = tn;
+            fnArr[j] = fn;
         }
+
+        double tpAvg        = getMeanFromIntArray(tpArr);
+        double fpAvg        = getMeanFromIntArray(fpArr);
+        double tnAvg        = getMeanFromIntArray(tnArr);
+        double fnAvg        = getMeanFromIntArray(fnArr);
+        double accuracy     = (tpAvg + tnAvg)/(tpAvg + tnAvg + fpAvg + fnAvg);
+        double tnRate       = tnAvg/(tnAvg + fpAvg);
+        double tpRate       = tpAvg/(tpAvg + fnAvg);
+        double fpRate       = 1 - tnRate;
+        double gMean        = Math.sqrt(tpRate * tnRate);
+        double auc          = (1 + tpRate - fpRate) / 2;
+
+        System.out.println("\n#########################\n#                       #\n#        Results        #\n#                       #\n#########################\n");
+        System.out.println("TP = " + tpAvg + "\tFN = " + fnAvg);
+        System.out.println("FP = " + fpAvg + "\tTN = " + tnAvg);
+        System.out.println("\nAccuracy\t= " + accuracy);
+        System.out.println("TNrate\t\t= " + tnRate);
+        System.out.println("TPrate\t\t= " + tpRate);
+        System.out.println("GMean\t\t= " + gMean);
+        System.out.println("AUC\t\t= " + auc);
+
+        System.out.println("\n#########################\n#                       #\n#      Other stats      #\n#                       #\n#########################\n");
+        System.out.println("Number of instances:\t\t" + numberOfInstances);
+        System.out.println("Number of experiments:\t\t" + numberOfExperiments);
+        System.out.println("Number of folds:\t\t" + numberOfFolds);
+        System.out.println("Size of the training set:\t" + trainingSetSize);
+        System.out.println("Size of the testing set:\t" + testingSetSize);
+
+        Attribute classAttribute    = instances.classAttribute();
+        Enumeration classValues     = classAttribute.enumerateValues();
+
+        System.out.println("Class name:\t\t\t" + instances.classAttribute().name());
+        System.out.print("Class values:\t\t\t");
+
+        while (classValues.hasMoreElements())
+        {
+            System.out.print(classValues.nextElement());
+
+            if (classValues.hasMoreElements())
+            {
+                System.out.print(", ");
+            }
+            else
+            {
+                System.out.println();
+            }
+        }
+
+        System.err.println();
     }
 }

@@ -1,0 +1,29 @@
+
+#########################
+#                       #
+#        Results        #
+#                       #
+#########################
+
+TP = 1250.0 FN = 66.0
+FP = 187.0  TN = 77.0
+
+Accuracy    = 0.839873417721519
+TNrate      = 0.2916666666666667
+TPrate      = 0.9498480243161094
+GMean       = 0.5263449506665744
+AUC         = 0.6207573454913881
+
+#########################
+#                       #
+#      Other stats      #
+#                       #
+#########################
+
+Number of instances:        1581
+Number of experiments:      1
+Number of folds:            10
+Size of the training set:   1423
+Size of the testing set:    158
+Class name:                 status pozyczki
+Class values:               zly, dobry
