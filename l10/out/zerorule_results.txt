@@ -1,0 +1,53 @@
+#####################################
+#                                   #
+#      (c) 2018 Osada Krzysztof     #
+#                                   #
+#####################################
+
+Classifier used:
+ZeroRule
+
+
+#####################################
+#                                   #
+#              Results              #
+#                                   #
+#####################################
+
+Confusion matrix [TP FN / FP TN]:
+1316.0	0.0
+265.0	0.0
+
+ACC   = 0.8323845667299178
+TNR   = 0.0
+TPR   = 1.0
+AUC   = 0.5
+GMean = 0.0
+
+
+#####################################
+#                                   #
+#            Other stats            #
+#                                   #
+#####################################
+
+Number of instances:
+1581
+
+Number of experiments:
+1
+
+Number of folds:
+10
+
+Size of the training set:
+1422
+
+Size of the testing set:
+159
+
+Class name:
+status pozyczki
+
+Class values:
+zly, dobry

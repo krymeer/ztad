@@ -1,0 +1,53 @@
+#####################################
+#                                   #
+#      (c) 2018 Osada Krzysztof     #
+#                                   #
+#####################################
+
+Classifier used:
+MultilayerPerceptron
+
+
+#####################################
+#                                   #
+#              Results              #
+#                                   #
+#####################################
+
+Confusion matrix [TP FN / FP TN]:
+1279.0	37.0
+212.0	53.0
+
+ACC   = 0.8425047438330171
+TNR   = 0.2
+TPR   = 0.9718844984802432
+AUC   = 0.5859422492401215
+GMean = 0.440881956646049
+
+
+#####################################
+#                                   #
+#            Other stats            #
+#                                   #
+#####################################
+
+Number of instances:
+1581
+
+Number of experiments:
+1
+
+Number of folds:
+10
+
+Size of the training set:
+1422
+
+Size of the testing set:
+159
+
+Class name:
+status pozyczki
+
+Class values:
+zly, dobry

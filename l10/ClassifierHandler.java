@@ -1,3 +1,9 @@
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.lang.Math;
 import java.util.Enumeration;
 import java.util.Random;
@@ -11,7 +17,7 @@ public class ClassifierHandler {
     private void printInstances(Instances instances) {
         for (Instance inst : instances)
         {
-            System.out.println(inst);
+            System.err.println(inst);
         }
     }
 
@@ -124,58 +130,85 @@ public class ClassifierHandler {
             fnArr[j] = fn;
         }
 
-        double tpAvg        = getMeanFromIntArray(tpArr);
-        double fpAvg        = getMeanFromIntArray(fpArr);
-        double tnAvg        = getMeanFromIntArray(tnArr);
-        double fnAvg        = getMeanFromIntArray(fnArr);
-        double accuracy     = (tpAvg + tnAvg)/(tpAvg + tnAvg + fpAvg + fnAvg);
-        double tnRate       = tnAvg/(tnAvg + fpAvg);
-        double tpRate       = tpAvg/(tpAvg + fnAvg);
-        double fpRate       = 1 - tnRate;
-        double gMean        = Math.sqrt(tpRate * tnRate);
-        double auc          = (1 + tpRate - fpRate) / 2;
+        double tpAvg    = getMeanFromIntArray(tpArr);
+        double fpAvg    = getMeanFromIntArray(fpArr);
+        double tnAvg    = getMeanFromIntArray(tnArr);
+        double fnAvg    = getMeanFromIntArray(fnArr);
+        double accuracy = (tpAvg + tnAvg)/(tpAvg + tnAvg + fpAvg + fnAvg);
+        double tnRate   = tnAvg/(tnAvg + fpAvg);
+        double tpRate   = tpAvg/(tpAvg + fnAvg);
+        double fpRate   = 1 - tnRate;
+        double gMean    = Math.sqrt(tpRate * tnRate);
+        double auc      = (1 + tpRate - fpRate) / 2;
+        String pathStr  = "out/";
+        Path path       = Paths.get(pathStr);
+        String filename = pathStr + classifier.toLowerCase() + "_results.txt";
 
-        System.out.println("\nClassifier used: " + Appendix.getClassifierName(classifier));
-
-        if (!classifierOptions.equals(""))
+        if (Files.notExists(path))
         {
-            System.out.println("Classifier parameters set: " + classifierOptions);
+            try
+            {
+                Files.createDirectories(path);
+            }
+            catch(IOException e)
+            {
+                System.err.println();
+                e.printStackTrace();
+            }
         }
 
-        System.out.println("\n#########################\n#                       #\n#        Results        #\n#                       #\n#########################\n");
-        System.out.println("TP = " + tpAvg + "\t\tFN = " + fnAvg);
-        System.out.println("FP = " + fpAvg + "\t\tTN = " + tnAvg);
-        System.out.println("\nAccuracy\t= " + accuracy);
-        System.out.println("TNrate\t\t= " + tnRate);
-        System.out.println("TPrate\t\t= " + tpRate);
-        System.out.println("GMean\t\t= " + gMean);
-        System.out.println("AUC\t\t= " + auc);
-
-        System.out.println("\n#########################\n#                       #\n#      Other stats      #\n#                       #\n#########################\n");
-        System.out.println("Number of instances:\t\t" + numberOfInstances);
-        System.out.println("Number of experiments:\t\t" + numberOfExperiments);
-        System.out.println("Number of folds:\t\t" + numberOfFolds);
-        System.out.println("Size of the training set:\t" + trainingSetSize);
-        System.out.println("Size of the testing set:\t" + testingSetSize);
-
-        Attribute classAttribute    = instances.classAttribute();
-        Enumeration classValues     = classAttribute.enumerateValues();
-
-        System.out.println("Class name:\t\t\t" + instances.classAttribute().name());
-        System.out.print("Class values:\t\t\t");
-
-        while (classValues.hasMoreElements())
+        try (PrintWriter out = new PrintWriter(filename))
         {
-            System.out.print(classValues.nextElement());
+            out.println("#####################################\n#                                   #\n#      (c) 2018 Osada Krzysztof     #\n#                                   #\n#####################################");
+            out.println("\nClassifier used:\n" + Appendix.getClassifierName(classifier));
 
-            if (classValues.hasMoreElements())
+            if (!classifierOptions.equals("[]"))
             {
-                System.out.print(", ");
+                out.println("\nClassifier parameters set:\n" + classifierOptions);
             }
-            else
+
+            out.println("\n\n#####################################\n#                                   #\n#              Results              #\n#                                   #\n#####################################\n");
+
+            out.println("Confusion matrix [TP FN / FP TN]:");
+            out.println(tpAvg + "\t" + fnAvg);
+            out.println(fpAvg + "\t" + tnAvg + "\n");
+            out.println("ACC   = " + accuracy);
+            out.println("TNR   = " + tnRate);
+            out.println("TPR   = " + tpRate);
+            out.println("AUC   = " + auc);
+            out.println("GMean = " + gMean);
+
+            out.println("\n\n#####################################\n#                                   #\n#            Other stats            #\n#                                   #\n#####################################");
+            out.println("\nNumber of instances:\n" + numberOfInstances);
+            out.println("\nNumber of experiments:\n" + numberOfExperiments);
+            out.println("\nNumber of folds:\n" + numberOfFolds);
+            out.println("\nSize of the training set:\n" + trainingSetSize);
+            out.println("\nSize of the testing set:\n" + testingSetSize);
+
+            Attribute classAttribute    = instances.classAttribute();
+            Enumeration classValues     = classAttribute.enumerateValues();
+
+            out.println("\nClass name:\n" + instances.classAttribute().name());
+            out.print("\nClass values:\n");
+
+            while (classValues.hasMoreElements())
             {
-                System.out.println();
+                out.print(classValues.nextElement());
+
+                if (classValues.hasMoreElements())
+                {
+                    out.print(", ");
+                }
             }
+
+            out.close();
+
+            System.err.println("Info: file \"" + filename + "\" has been created");
+        }
+        catch(FileNotFoundException e)
+        {
+            System.err.println();
+            e.printStackTrace();
         }
 
         System.err.println();

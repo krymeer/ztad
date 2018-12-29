@@ -1,0 +1,56 @@
+#####################################
+#                                   #
+#      (c) 2018 Osada Krzysztof     #
+#                                   #
+#####################################
+
+Classifier used:
+J48
+
+Classifier parameters set:
+[-U]
+
+
+#####################################
+#                                   #
+#              Results              #
+#                                   #
+#####################################
+
+Confusion matrix [TP FN / FP TN]:
+1290.0	26.0
+216.0	49.0
+
+ACC   = 0.846932321315623
+TNR   = 0.18490566037735848
+TPR   = 0.9802431610942249
+AUC   = 0.5825744107357916
+GMean = 0.4257376058472132
+
+
+#####################################
+#                                   #
+#            Other stats            #
+#                                   #
+#####################################
+
+Number of instances:
+1581
+
+Number of experiments:
+1
+
+Number of folds:
+10
+
+Size of the training set:
+1422
+
+Size of the testing set:
+159
+
+Class name:
+status pozyczki
+
+Class values:
+zly, dobry

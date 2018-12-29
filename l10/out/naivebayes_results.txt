@@ -1,0 +1,53 @@
+#####################################
+#                                   #
+#      (c) 2018 Osada Krzysztof     #
+#                                   #
+#####################################
+
+Classifier used:
+NaiveBayes
+
+
+#####################################
+#                                   #
+#              Results              #
+#                                   #
+#####################################
+
+Confusion matrix [TP FN / FP TN]:
+1247.0	69.0
+180.0	85.0
+
+ACC   = 0.8425047438330171
+TNR   = 0.32075471698113206
+TPR   = 0.9475683890577508
+AUC   = 0.6341615530194414
+GMean = 0.5513048434872363
+
+
+#####################################
+#                                   #
+#            Other stats            #
+#                                   #
+#####################################
+
+Number of instances:
+1581
+
+Number of experiments:
+1
+
+Number of folds:
+10
+
+Size of the training set:
+1422
+
+Size of the testing set:
+159
+
+Class name:
+status pozyczki
+
+Class values:
+zly, dobry
