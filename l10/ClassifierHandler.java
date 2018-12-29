@@ -41,24 +41,33 @@ public class ClassifierHandler {
         Instances testingSet;
         Instances trainingSet;
         Random rand;
-        int tn, tp, fn, fp;
+        int tn, tp, fn, fp, instancesUsedNum;
+        int testingSetSize          = 0;
+        int trainingSetSize         = 0;
         int[] tpArr                 = new int[numberOfExperiments];
         int[] fpArr                 = new int[numberOfExperiments];
         int[] tnArr                 = new int[numberOfExperiments];
         int[] fnArr                 = new int[numberOfExperiments];
-        int testingSetSize          = numberOfInstances / numberOfFolds;
-        int trainingSetSize         = numberOfInstances - testingSetSize;
         String classifierOptions    = Appendix.getClassifierOptionsAsString(classifier);
 
         instances.setClassIndex(classIndex);
 
         for (int j = 0; j < numberOfExperiments; j++)
         {
-            instancesUsed = new boolean[numberOfInstances];
+
+            testingSetSize      = numberOfInstances / numberOfFolds;
+            trainingSetSize     = testingSetSize * (numberOfFolds - 1);
+            instancesUsed       = new boolean[numberOfInstances];
+            instancesUsedNum    = 0;
             tn = 0; tp = 0; fn = 0; fp = 0;
 
             for (int k = 0; k < numberOfFolds; k++)
             {
+                if (k == numberOfFolds - 1 && (numberOfInstances - instancesUsedNum) > testingSetSize)
+                {
+                    testingSetSize = (numberOfInstances - instancesUsedNum);
+                }
+
                 testingSet      = new Instances(instances, testingSetSize);
                 trainingSet     = new Instances(instances, trainingSetSize);
                 rand            = new Random();
@@ -72,16 +81,21 @@ public class ClassifierHandler {
                     {
                         currentlyTested[index]  = true;
                         instancesUsed[index]    = true;
+                        instancesUsedNum++;
                         testingSet.add(instances.get(index));
                     }
                 }
 
-                for (int i = 0; i < numberOfInstances; i++)
+                int i = 0;
+
+                while (trainingSetSize != trainingSet.size())
                 {
                     if (!currentlyTested[i])
                     {
                         trainingSet.add(instances.get(i));
                     }
+
+                    i++;
                 }
 
                 try
