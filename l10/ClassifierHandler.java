@@ -37,17 +37,18 @@ public class ClassifierHandler {
         boolean[] currentlyTested;
         AbstractClassifier absCls;
         Evaluation eval;
-        Instances instances = new Instances(inputSet);
+        Instances instances         = new Instances(inputSet);
         Instances testingSet;
         Instances trainingSet;
         Random rand;
         int tn, tp, fn, fp;
-        int[] tpArr         = new int[numberOfExperiments];
-        int[] fpArr         = new int[numberOfExperiments];
-        int[] tnArr         = new int[numberOfExperiments];
-        int[] fnArr         = new int[numberOfExperiments];
-        int testingSetSize  = numberOfInstances / numberOfFolds;
-        int trainingSetSize = numberOfInstances - testingSetSize;
+        int[] tpArr                 = new int[numberOfExperiments];
+        int[] fpArr                 = new int[numberOfExperiments];
+        int[] tnArr                 = new int[numberOfExperiments];
+        int[] fnArr                 = new int[numberOfExperiments];
+        int testingSetSize          = numberOfInstances / numberOfFolds;
+        int trainingSetSize         = numberOfInstances - testingSetSize;
+        String classifierOptions    = Appendix.getClassifierOptionsAsString(classifier);
 
         instances.setClassIndex(classIndex);
 
@@ -121,6 +122,11 @@ public class ClassifierHandler {
         double auc          = (1 + tpRate - fpRate) / 2;
 
         System.out.println("\nClassifier used: " + Appendix.getClassifierName(classifier));
+
+        if (!classifierOptions.equals(""))
+        {
+            System.out.println("Classifier parameters set: " + classifierOptions);
+        }
 
         System.out.println("\n#########################\n#                       #\n#        Results        #\n#                       #\n#########################\n");
         System.out.println("TP = " + tpAvg + "\t\tFN = " + fnAvg);

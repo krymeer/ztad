@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import weka.classifiers.AbstractClassifier;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.functions.MultilayerPerceptron;
@@ -8,6 +9,7 @@ import weka.classifiers.trees.J48;
 
 public class Appendix {
     private static String[] classifiers = {"JRip", "J48", "MultilayerPerceptron", "NaiveBayes", "SMO", "ZeroRule"};
+    private static String[][] options   = {new String[]{"-P"}, new String[]{"-U"}, new String[]{}, new String[]{}, new String[]{}, new String[]{}};
 
     public static String[] getAllClassifiersNames() {
         return classifiers;
@@ -25,42 +27,64 @@ public class Appendix {
         return "";
     }
 
+    public static String getClassifierOptionsAsString(String classifier) {
+        int index = getClassifierIndex(classifier);
+        String s[] = new String[]{};
+
+        if (index >= 0)
+        {
+            return Arrays.toString(options[index]);
+        }
+
+        return "";
+    }
+
+    public static int getClassifierIndex(String s) {
+        for (int k = 0; k < classifiers.length; k++)
+        {
+            if (classifiers[k].toLowerCase().equals(s.toLowerCase()))
+            {
+                return k;
+            }
+        }
+
+        return -1;
+    }
+
     public static AbstractClassifier getClassifier(String name) {
         AbstractClassifier abstractClassifier = null;
-        String[] options = {};
+        int index = getClassifierIndex(name);
 
-        if (name.equals("NaiveBayes"))
+        if (index >= 0)
         {
-            abstractClassifier = new NaiveBayes();
-        }
-        else if (name.equals("J48"))
-        {
-            abstractClassifier  = new J48();
-            options             = new String[]{"-U"};
-        }
-        else if (name.equals("JRip"))
-        {
-            abstractClassifier  = new JRip();
-            options             = new String[]{"-P"};
-        }
-        else if (name.equals("MultilayerPerceptron"))
-        {
-            abstractClassifier = new MultilayerPerceptron();
-        }
-        else if (name.equals("SMO"))
-        {
-            abstractClassifier = new SMO();
-        }
-        else if (name.equals("ZeroRule"))
-        {
-            abstractClassifier = new ZeroR();
-        }
+            if (name.equals("NaiveBayes"))
+            {
+                abstractClassifier = new NaiveBayes();
+            }
+            else if (name.equals("J48"))
+            {
+                abstractClassifier  = new J48();
+            }
+            else if (name.equals("JRip"))
+            {
+                abstractClassifier  = new JRip();
+            }
+            else if (name.equals("MultilayerPerceptron"))
+            {
+                abstractClassifier = new MultilayerPerceptron();
+            }
+            else if (name.equals("SMO"))
+            {
+                abstractClassifier = new SMO();
+            }
+            else if (name.equals("ZeroRule"))
+            {
+                abstractClassifier = new ZeroR();
+            }
 
-        if (options.length > 0)
-        {
             try
             {
-                abstractClassifier.setOptions(options);
+                abstractClassifier.setOptions(options[index]);
             }
             catch (Exception e)
             {

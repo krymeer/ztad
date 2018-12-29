@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import weka.core.Instances;
 
 public class Main {
@@ -22,9 +21,9 @@ public class Main {
             System.exit(1);
         }
 
-        adr.classifier = Appendix.getClassifierName(adr.classifier);
+        int classifierIndex = Appendix.getClassifierIndex(adr.classifier);
 
-        if (adr.classifier.equals(""))
+        if (classifierIndex < 0)
         {
             System.err.println("\nError: unknown classifier: \"" + adr.classifier + "\"");
             System.err.println("\nAvailable classifiers: ");
@@ -38,6 +37,10 @@ public class Main {
 
             System.err.print("\"" + classifiers[classifiers.length-1] + "\"\n\n");
             System.exit(1);
+        }
+        else
+        {
+            adr.classifier = Appendix.getClassifierName(adr.classifier);
         }
 
         if (adr.numberOfFolds < 0)
