@@ -74,7 +74,7 @@ public class ArffDataReader {
         if (args.length < 1 || (args.length % 2) > 0)
         {
             System.err.println("\nUsage: java -cp .:weka.jar Main -f filename -cls classifier -ci classIndex -nf numberOfFolds -ne numberOfExperiments\n");
-            System.exit(0);
+            System.exit(1);
         }
 
         for (int k = 0; k < args.length-1; k++)

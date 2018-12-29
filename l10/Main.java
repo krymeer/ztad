@@ -10,7 +10,7 @@ public class Main {
         if (adr.inputSet == null)
         {
             System.err.println("\nError: the input set is null\n");
-            System.exit(0);
+            System.exit(1);
         }
         
         int numberOfInstances   = adr.inputSet.size();
@@ -19,7 +19,7 @@ public class Main {
         if (numberOfInstances <= 0)
         {
             System.err.println("\nError: the input set is empty\n");
-            System.exit(0);
+            System.exit(1);
         }
 
         adr.classifier = Appendix.getClassifierName(adr.classifier);
@@ -37,34 +37,34 @@ public class Main {
             }
 
             System.err.print("\"" + classifiers[classifiers.length-1] + "\"\n\n");
-            System.exit(0);
+            System.exit(1);
         }
 
         if (adr.numberOfFolds < 0)
         {
             System.err.println("\nError: number of folds(" + adr.numberOfFolds + ") is smaller than 0\n");
-            System.exit(0);
+            System.exit(1);
         }
         else if (adr.numberOfFolds > numberOfInstances)
         {
             System.err.println("\nError: number of folds (" + adr.numberOfFolds + ") is greater than number of instances (" + numberOfInstances + ")\n");
-            System.exit(0);
+            System.exit(1);
         }
 
         if (adr.classIndex < 0)
         {
             System.err.println("\nError: number of folds(" + adr.classIndex + ") is smaller than 0\n");
-            System.exit(0);
+            System.exit(1);
         }
         else if (adr.classIndex >= numberOfAttributes)
         {
             System.err.println("\nError: the class index (" + adr.classIndex + ") is greater than number of attributes (" + numberOfAttributes + ") for the given input set\n");
-            System.exit(0);
+            System.exit(1);
         }
         else if (adr.numberOfExperiments < 1)
         {
             System.err.println("\nError: number of experiments (" + adr.numberOfExperiments + ") is smaller than the allowed minimum (1)\n");
-            System.exit(0);
+            System.exit(1);
         }
 
 
