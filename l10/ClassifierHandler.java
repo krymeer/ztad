@@ -4,9 +4,8 @@ import java.util.Random;
 import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
-import weka.classifiers.Classifier;
+import weka.classifiers.AbstractClassifier;
 import weka.classifiers.Evaluation;
-import weka.classifiers.bayes.NaiveBayes;
 
 public class ClassifierHandler {
     private void printInstances(Instances instances) {
@@ -14,15 +13,6 @@ public class ClassifierHandler {
         {
             System.out.println(inst);
         }
-    }
-
-    private Classifier getClassifier(String name) {
-        if (name.equals("bayes"))
-        {
-            return new NaiveBayes();
-        }
-        
-        return null;
     }
 
     private double getMeanFromIntArray(int[] arr) {
@@ -45,7 +35,7 @@ public class ClassifierHandler {
     public void testClassifier(Instances inputSet, String classifier, int classIndex, int numberOfFolds, int numberOfInstances, int numberOfExperiments) {
         boolean[] instancesUsed;
         boolean[] currentlyTested;
-        Classifier cls;
+        AbstractClassifier absCls;
         Evaluation eval;
         Instances instances = new Instances(inputSet);
         Instances testingSet;
@@ -95,11 +85,11 @@ public class ClassifierHandler {
 
                 try
                 {
-                    cls = getClassifier(classifier);
-                    eval = new Evaluation(trainingSet);
+                    absCls  = Appendix.getClassifier(classifier);
+                    eval    = new Evaluation(trainingSet);
 
-                    cls.buildClassifier(trainingSet);
-                    eval.evaluateModel(cls, testingSet);
+                    absCls.buildClassifier(trainingSet);
+                    eval.evaluateModel(absCls, testingSet);
 
                     tn += eval.numTrueNegatives(classIndex);
                     tp += eval.numTruePositives(classIndex);
@@ -130,9 +120,11 @@ public class ClassifierHandler {
         double gMean        = Math.sqrt(tpRate * tnRate);
         double auc          = (1 + tpRate - fpRate) / 2;
 
+        System.out.println("\nClassifier used: " + Appendix.getClassifierName(classifier));
+
         System.out.println("\n#########################\n#                       #\n#        Results        #\n#                       #\n#########################\n");
-        System.out.println("TP = " + tpAvg + "\tFN = " + fnAvg);
-        System.out.println("FP = " + fpAvg + "\tTN = " + tnAvg);
+        System.out.println("TP = " + tpAvg + "\t\tFN = " + fnAvg);
+        System.out.println("FP = " + fpAvg + "\t\tTN = " + tnAvg);
         System.out.println("\nAccuracy\t= " + accuracy);
         System.out.println("TNrate\t\t= " + tnRate);
         System.out.println("TPrate\t\t= " + tpRate);

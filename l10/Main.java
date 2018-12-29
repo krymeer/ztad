@@ -4,7 +4,6 @@ import weka.core.Instances;
 public class Main {
     public static void main(String[] args) {
         ArffDataReader adr = new ArffDataReader();
-        String[] classifiers = {"bayes", "jrip"};
 
         adr.handleArgs(args);
 
@@ -23,10 +22,14 @@ public class Main {
             System.exit(0);
         }
 
-        if (!Arrays.stream(classifiers).anyMatch(adr.classifier::equals))
+        adr.classifier = Appendix.getClassifierName(adr.classifier);
+
+        if (adr.classifier.equals(""))
         {
             System.err.println("\nError: unknown classifier: \"" + adr.classifier + "\"");
             System.err.println("\nAvailable classifiers: ");
+
+            String[] classifiers = Appendix.getAllClassifiersNames();
 
             for (int k = 0; k < classifiers.length-1; k++)
             {

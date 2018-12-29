@@ -139,21 +139,3 @@ public class ArffDataReader {
         }
     }
 }
-
-// TODO
-
-/*
-    System.out.println("testSet: " + testSet.size());
-
-    for (int i = 0; i < testSetSize; i++)
-    {
-        System.out.println(testSet.get(i));
-    }
-
-    System.out.println("\ntrainingSet: " + trainingSet.size());
-
-    for (int i = 0; i < trainingSetSize; i++)
-    {
-        System.out.println(trainingSet.get(i));
-    }
-*/
