@@ -74,6 +74,6 @@ public class Main {
         System.err.println("\nInfo: file loaded successfully");
 
         ClassifierHandler handler = new ClassifierHandler();
-        handler.testClassifier(adr.inputSet, adr.classifier, adr.classIndex, adr.numberOfFolds, numberOfInstances, adr.numberOfExperiments);
+        handler.testClassifier(adr.inputSet, adr.classifier, adr.classifierOptions, adr.classIndex, adr.numberOfFolds, numberOfInstances, adr.numberOfExperiments);
     }
 }

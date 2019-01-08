@@ -9,7 +9,6 @@ import weka.classifiers.trees.J48;
 
 public class Appendix {
     private static String[] classifiers = {"JRip", "J48", "MultilayerPerceptron", "NaiveBayes", "SMO", "ZeroRule"};
-    private static String[][] options   = {new String[]{"-P"}, new String[]{"-U"}, new String[]{}, new String[]{}, new String[]{}, new String[]{}};
 
     public static String[] getAllClassifiersNames() {
         return classifiers;
@@ -27,18 +26,6 @@ public class Appendix {
         return "";
     }
 
-    public static String getClassifierOptionsAsString(String classifier) {
-        int index = getClassifierIndex(classifier);
-        String s[] = new String[]{};
-
-        if (index >= 0)
-        {
-            return Arrays.toString(options[index]);
-        }
-
-        return "";
-    }
-
     public static int getClassifierIndex(String s) {
         for (int k = 0; k < classifiers.length; k++)
         {
@@ -51,9 +38,10 @@ public class Appendix {
         return -1;
     }
 
-    public static AbstractClassifier getClassifier(String name) {
+    public static AbstractClassifier getClassifier(String name, String options) {
         AbstractClassifier abstractClassifier = null;
-        int index = getClassifierIndex(name);
+        String[] opts   = options.split(" ");
+        int index       = getClassifierIndex(name);
 
         if (index >= 0)
         {
@@ -84,7 +72,7 @@ public class Appendix {
 
             try
             {
-                abstractClassifier.setOptions(options[index]);
+                abstractClassifier.setOptions(opts);
             }
             catch (Exception e)
             {

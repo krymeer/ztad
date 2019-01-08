@@ -38,7 +38,7 @@ public class ClassifierHandler {
         return mean;
     }
 
-    public void testClassifier(Instances inputSet, String classifier, int classIndex, int numberOfFolds, int numberOfInstances, int numberOfExperiments) {
+    public void testClassifier(Instances inputSet, String classifier, String classifierOptions, int classIndex, int numberOfFolds, int numberOfInstances, int numberOfExperiments) {
         boolean[] instancesUsed;
         boolean[] currentlyTested;
         AbstractClassifier absCls;
@@ -54,7 +54,6 @@ public class ClassifierHandler {
         int[] fpArr                 = new int[numberOfExperiments];
         int[] tnArr                 = new int[numberOfExperiments];
         int[] fnArr                 = new int[numberOfExperiments];
-        String classifierOptions    = Appendix.getClassifierOptionsAsString(classifier);
 
         instances.setClassIndex(classIndex);
 
@@ -106,7 +105,7 @@ public class ClassifierHandler {
 
                 try
                 {
-                    absCls  = Appendix.getClassifier(classifier);
+                    absCls  = Appendix.getClassifier(classifier, classifierOptions);
                     //eval    = new Evaluation(trainingSet);
 
                     absCls.buildClassifier(trainingSet);
@@ -190,9 +189,9 @@ public class ClassifierHandler {
             out.println("#####################################\n#                                   #\n#   (c) 2018-2019 Osada Krzysztof   #\n#                                   #\n#####################################");
             out.println("\nClassifier used:\n" + Appendix.getClassifierName(classifier));
 
-            if (!classifierOptions.equals("[]"))
+            if (!classifierOptions.equals(""))
             {
-                out.println("\nClassifier parameters set:\n" + classifierOptions);
+                out.println("\nAssumed classifier parameters set:\n" + classifierOptions);
             }
 
             out.println("\n\n#####################################\n#                                   #\n#              Results              #\n#                                   #\n#####################################\n");

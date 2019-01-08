@@ -10,6 +10,7 @@ import weka.core.Instances;
 public class ArffDataReader {
     Instances inputSet;
     String classifier;
+    String classifierOptions;
     int classIndex;
     int numberOfFolds;
     int numberOfExperiments;
@@ -17,6 +18,7 @@ public class ArffDataReader {
     ArffDataReader() {
         this.inputSet               = null;
         this.classifier             = "";
+        this.classifierOptions      = "";
         this.classIndex             = -1;
         this.numberOfFolds          = -1;
         this.numberOfExperiments    = -1;
@@ -73,7 +75,7 @@ public class ArffDataReader {
 
         if (args.length < 1 || (args.length % 2) > 0)
         {
-            System.err.println("\nUsage: java -cp .:weka.jar Main -f filename -cls classifier -ci classIndex -nf numberOfFolds -ne numberOfExperiments\n");
+            System.err.println("\nUsage: java -cp .:weka.jar Main -f filename -cls classifier -clop classifierOptions -ci classIndex -nf numberOfFolds -ne numberOfExperiments\n");
             System.exit(1);
         }
 
@@ -123,6 +125,10 @@ public class ArffDataReader {
                     System.err.println();
                     e.printStackTrace();
                 }
+            }
+            else if (args[k].equals("-clop"))
+            {
+                this.classifierOptions = args[k+1].replaceAll("\\s{2,}", " ").trim();
             }
         }
 
