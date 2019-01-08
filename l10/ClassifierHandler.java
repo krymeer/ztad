@@ -11,7 +11,7 @@ import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.classifiers.AbstractClassifier;
-import weka.classifiers.Evaluation;
+//import weka.classifiers.Evaluation;
 
 public class ClassifierHandler {
     private void printInstances(Instances instances) {
@@ -42,7 +42,7 @@ public class ClassifierHandler {
         boolean[] instancesUsed;
         boolean[] currentlyTested;
         AbstractClassifier absCls;
-        Evaluation eval;
+        //Evaluation eval;
         Instances instances         = new Instances(inputSet);
         Instances testingSet;
         Instances trainingSet;
@@ -107,15 +107,43 @@ public class ClassifierHandler {
                 try
                 {
                     absCls  = Appendix.getClassifier(classifier);
-                    eval    = new Evaluation(trainingSet);
+                    //eval    = new Evaluation(trainingSet);
 
                     absCls.buildClassifier(trainingSet);
-                    eval.evaluateModel(absCls, testingSet);
 
-                    tn += eval.numTrueNegatives(classIndex);
-                    tp += eval.numTruePositives(classIndex);
-                    fn += eval.numFalseNegatives(classIndex);
-                    fp += eval.numFalsePositives(classIndex);
+                    for( Instance inst : testingSet )
+                    {
+                        double realValue        = inst.value(classIndex); 
+                        double predictedValue   = absCls.classifyInstance(inst);
+
+                        if (realValue == 1 && predictedValue == 1) // TP
+                        {
+                            tp++;
+                        }
+                        else if (realValue == 0 && predictedValue == 1) // FP
+                        {
+                            fp++;
+                        }
+                        else if (realValue == 0 && predictedValue == 0) // TN
+                        {
+                            tn++;
+                        }
+                        else if (realValue == 1 && predictedValue == 0) // FN
+                        {
+                            fn++;
+                        }
+                    }
+
+                /*
+                 * Testowanie klasyfikatora przy uzyciu ewaluatora
+                 * (zastapione przez zliczanie reczne)
+                 */
+                //    eval.evaluateModel(absCls, testingSet);
+
+                //    tn += eval.numTrueNegatives(classIndex);
+                //    tp += eval.numTruePositives(classIndex);
+                //    fn += eval.numFalseNegatives(classIndex);
+                //    fp += eval.numFalsePositives(classIndex);
                 }
                 catch(Exception e)
                 {
@@ -159,7 +187,7 @@ public class ClassifierHandler {
 
         try (PrintWriter out = new PrintWriter(filename))
         {
-            out.println("#####################################\n#                                   #\n#      (c) 2018 Osada Krzysztof     #\n#                                   #\n#####################################");
+            out.println("#####################################\n#                                   #\n#   (c) 2018-2019 Osada Krzysztof   #\n#                                   #\n#####################################");
             out.println("\nClassifier used:\n" + Appendix.getClassifierName(classifier));
 
             if (!classifierOptions.equals("[]"))
