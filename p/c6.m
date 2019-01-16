@@ -10,9 +10,9 @@ C1  = M(:, 1)
 C2  = M(:, 2) 
 C3  = M(:, 3)
 
-%%{
+%{
 qqplot(C3)
 title('Kurs sredni walut obcych - populacja nr 3')
 ylabel('Kwantyle probek wejsciowych')
 xlabel('Kwantyle normalne')
-%%}
+%}

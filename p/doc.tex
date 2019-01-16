@@ -189,9 +189,44 @@ Po wywołaniu funkcji \texttt{mwwtest} jak na Listingu \ref{listing:c32} otrzyma
 Ponieważ uzyskane wyniki parametru $p$ dla wszystkich badanych par próbek z populacji (P1 i P2, P2 i P3 oraz P1 i P3) są znacząco większe od zakładanego poziomu istotności (0.05), \textbf{nie mamy podstaw do odrzucenia hipotez zerowych} głoszących, że próbki z~populacji są jednakowo duże. Innymi słowy, przyjmujemy, że kursy średnie walut obcych były takie same w kolejnych dniach (17, 24 i 31 grudnia).
 
 \section*{Ćwiczenie nr 4}
-\textit{To be continued...}
+\begin{hangparas}{2cm}{1}
+  \textbf{Problem:} Sprawdzić, w której populacji badana cecha ma największą średnią/medianę. Wykonać kilka testów parami: populacja 1. z 2., 1. z 3., 2. z 3.\newline
+\end{hangparas}
 
-\section*{Ćwiczenie nr 5}
+\begin{hangparas}{2.85cm}{1}
+\textbf{Rozwiązanie:} Skorzystamy z \textbf{testu kolejności par Wilcoxona}, który nie wymaga spełnienia założenia o pochodzeniu próbek z rozkładu normalnego, aby zbadać mediany badanej cechy we wszystkich trzech populacjach. Użyjemy testu jednostronnego, bo chcemy, aby hipotezą alternatywną była nierówność tych median.\newline
+\end{hangparas}
+
+Zdefiniujmy hipotezy analogiczne do tych z poprzednich ćwiczeń:\newline
+
+\noindent
+\textbf{H0\textsubscript{(12)}:} mediana badanej cechy w P1 jest równa medianie badanej cechy w P2. \newline
+\textbf{H1\textsubscript{(12)}:} mediana badanej cechy w P1 jest mniejsza od mediany badanej cechy w P2. \newline
+\textbf{H0\textsubscript{(23)}:} mediana badanej cechy w P2 jest równa medianie badanej cechy w P3. \newline
+\textbf{H1\textsubscript{(23)}:} mediana badanej cechy w P2 jest mniejsza od mediany badanej cechy w P3. \newline
+\textbf{H0\textsubscript{(13)}:} mediana badanej cechy w P1 jest równa medianie badanej cechy w P3. \newline
+\textbf{H1\textsubscript{(13)}:} mediana badanej cechy w P1 jest mniejsza od mediany badanej cechy w P3. \newline
+
+Skorzystamy z wbudowanej w program Matlab funkcji \texttt{ranksum} -- podanie dodatkowych parametrów (\texttt{'tail'} i \texttt{'right'}) pozwoli na ustalenie oczekiwanych hipotez alternatywnych o nierówności median badanej cechy (zob. Listing \ref{listing:c4}).\newline
+
+\begin{lstlisting}[frame=single,label={listing:c4},caption={badanie równości median badanej cechy we wszystkich populacjach.},captionpos=b]
+prs12 = ranksum(C1, C2, 'tail', 'right')
+prs23 = ranksum(C2, C3, 'tail', 'right')
+prs13 = ranksum(C1, C3, 'tail', 'right')
+\end{lstlisting}
+
+\noindent Po wywołaniu kodu otrzymamy wartości parametru $p$:
+
+\begin{center}
+  \begin{tabular}{|c|c|c|}\hline
+    \tt prs12 & \tt prs23 & \tt prs13 \\\hline
+    0.4488 & 0.5561 & 0.5171 \\\hline
+  \end{tabular}
+  \captionof{table}{wartości uzyskane po wykonaniu kodu z Listingu \ref{listing:c4}.}
+  \label{table:c4}
+\end{center}
+
+Podobnie jak w poprzednim wyniku, wartości $p$ we wszystkich trzech przypadkach bezsprzecznie są większe od założonego poziomu istotności (0.05). \textbf{Nie mamy więc podstaw do odrzucenia hipotez zerowych} głoszących, że mediany badanej cechy w populacjach są sobie parami równe.
 
 \section*{Ćwiczenie nr 6}
 \begin{hangparas}{2.1cm}{1}
