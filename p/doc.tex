@@ -11,6 +11,7 @@
 \usepackage{hanging}
 \usepackage{longtable}
 \usepackage{listings}
+\usepackage{float}
 \usepackage{refcount}                   % Refers to another footnote
 \usepackage[hang,flushmargin]{footmisc} % Removes indentation in footnote
 \usepackage{caption}                    % Caption width
@@ -145,7 +146,7 @@ C3 = M(:, 3)
 [swh3, swp3, swstats3] = swtest(C3)
 \end{lstlisting}
 
-Otrzymane wyniki (zob. Tabela \ref{table:c31}) skłaniają do odrzucenia \textbf{wszystkich} hipotez zerowych na korzyść hipotez alternatywnych. Przyjmujemy więc, że żadna z próbek nie pochodzi z rozkładu normalnego.
+Otrzymane wyniki (zob. Tabela \ref{table:c31}) skłaniają do odrzucenia \textbf{wszystkich} hipotez zerowych na korzyść hipotez alternatywnych. Przyjmujemy więc, że żadna z próbek nie pochodzi z rozkładu normalnego (por. Rysunki \ref{fig:c61}, \ref{fig:c62} i \ref{fig:c63}).
 
 W tej sytuacji możemy korzystać tylko z testów, które nie wymagają spełnienia założenia normalności rozkładu. \textbf{Test U Manna-Whitneya} pozwoli nam na zweryfikowanie tego, czy dla każdej pary populacji zmienne z próbki A są większe od zmiennych z próbki B tak często, jak zmienne z próbki B są większe od zmiennych z próbki B.
 
@@ -187,13 +188,39 @@ Po wywołaniu funkcji \texttt{mwwtest} jak na Listingu \ref{listing:c32} otrzyma
 
 Ponieważ uzyskane wyniki parametru $p$ dla wszystkich badanych par próbek z populacji (P1 i P2, P2 i P3 oraz P1 i P3) są znacząco większe od zakładanego poziomu istotności (0.05), \textbf{nie mamy podstaw do odrzucenia hipotez zerowych} głoszących, że próbki z~populacji są jednakowo duże. Innymi słowy, przyjmujemy, że kursy średnie walut obcych były takie same w kolejnych dniach (17, 24 i 31 grudnia).
 
-
 \section*{Ćwiczenie nr 4}
+\textit{To be continued...}
 
 \section*{Ćwiczenie nr 5}
 
 \section*{Ćwiczenie nr 6}
+\begin{hangparas}{2.1cm}{1}
+  \textbf{Problem:} Wyznaczyć (jeśli to możliwe) 95\% i 99\% przedział ufności dla średniej oraz wariancji dla każdej populacji.\newline
+\end{hangparas}
 
+\begin{hangparas}{2.85cm}{1}
+\textbf{Rozwiązanie:} Wyznaczenie oczekiwanych parametrów \textbf{nie jest} możliwe -- żadna z próbek z populacji nie pochodzi z rozkładu normalnego.\newline
+\end{hangparas}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=.75\textwidth]{qqplot1.png}
+\caption{Wykres Q--Q dla populacji nr 1.}
+\label{fig:c61}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=.75\textwidth]{qqplot2.png}
+\caption{Wykres Q--Q dla populacji nr 2.}
+\label{fig:c62}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=.75\textwidth]{qqplot3.png}
+\caption{Wykres Q--Q dla populacji nr 3.}
+\label{fig:c63}
+\end{figure}
 
 \end{document}
